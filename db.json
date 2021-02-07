@@ -9,12 +9,12 @@
     {
       "name": "Samsung J7 Pro",
       "price": "7000000",
-      "status": true,
+      "status": false,
       "id": 5
     },
     {
       "name": "Asus",
-      "price": "600",
+      "price": "800",
       "status": true,
       "id": 6
     },
