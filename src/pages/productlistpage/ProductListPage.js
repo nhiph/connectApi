@@ -25,7 +25,8 @@ class ProductListPage extends Component {
 
   render () {
     // var {products} = this.props;
-    var products = [];
+    var products = this.state;
+    console.log(products);
     return (
       <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <Link to="/product/add" className="btn btn-info mb-10">
