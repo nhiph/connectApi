@@ -13,12 +13,6 @@
       "id": 5
     },
     {
-      "name": "Asus",
-      "price": "800",
-      "status": true,
-      "id": 6
-    },
-    {
       "name": "Samsung A30",
       "price": "8000000",
       "status": true,
