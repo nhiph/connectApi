@@ -3,8 +3,8 @@
     {
       "id": 2,
       "name": "Samsung",
-      "price": 10000000,
-      "status": false
+      "price": "20000",
+      "status": true
     },
     {
       "name": "Samsung J7 Pro",
@@ -17,6 +17,18 @@
       "price": "8000000",
       "status": true,
       "id": 7
+    },
+    {
+      "id": 8,
+      "name": "Ipad Air",
+      "price": "500000000",
+      "status": true
+    },
+    {
+      "id": 9,
+      "name": "Mac Pro",
+      "price": "30000000",
+      "status": ""
     }
   ]
 }

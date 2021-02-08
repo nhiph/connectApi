@@ -3,6 +3,8 @@ import ProductList from '../../components/productList/ProductList';
 import ProductItem from '../../components/productItem/ProductItem';
 import callApi from '../../utils/apiCaller';
 import { Link } from 'react-router-dom';
+import { actAddProductsRequest, actGetProductsRequest, actUpdateProductsRequest } from '../../actions/index';
+import { connect }from 'react-redux';
 
 class ProductActionPage extends Component {
   constructor(props){
@@ -16,18 +18,35 @@ class ProductActionPage extends Component {
   }
 
   componentDidMount(){
+    console.log('componentDidMount');
     var {match} = this.props;
     if(match){
       var id = match.params.id;
-      console.log(id);
-      callApi(`products/${id}`,'GET',null).then(res => {
-        var data = res.data;
-        this.setState({
-          id: data.id,
-          txtName: data.name,
-          txtPrice: data.price,
-          chkbStatus: data.status
-        });
+      // callApi(`products/${id}`,'GET',null).then(res => {
+      //   var data = res.data;
+      //   this.setState({
+      //     id: data.id,
+      //     txtName: data.name,
+      //     txtPrice: data.price,
+      //     chkbStatus: data.status
+      //   });
+      // });
+      this.props.onEditProducts(id);
+    }
+  }
+
+  //Khi componentDidMount ddc goi, no dispatch action + luu itemEditing vao store,    
+  // Sau dos mapStateToProps chuyen state tren store thanh props cho component form nhan duoc 1 props
+  // WillRecieveProps dc goi khi props thay doi (nextProps), TH nay la itemEditing, setState lai de do du lieu itemEDiting len Form
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps && nextProps.itemEditing){
+      var {itemEditing} = this.props;
+      this.setState({
+        id: itemEditing.id,
+        txtName: itemEditing.name,
+        txtPrice: itemEditing.price,
+        chkbStatus: itemEditing.status
       });
     }
   }
@@ -46,25 +65,34 @@ class ProductActionPage extends Component {
     console.log(this.state);
     var { id, txtName, txtPrice, chkbStatus } = this.state;
     var { history } = this.props;
+    var product = {
+      id: id,
+      name: txtName,
+      price: txtPrice,
+      status: chkbStatus
+    }
     if(id){ //update
       // http://localhost:3000/product/:id => HTTP Method: PUT
-        callApi(`products/${id}`, 'PUT', {
-          name: txtName,
-          price: txtPrice,
-          status: chkbStatus
-        }).then(res => {
-          history.goBack();
-        });
+        // callApi(`products/${id}`, 'PUT', {
+        //   name: txtName,
+        //   price: txtPrice,
+        //   status: chkbStatus
+        // }).then(res => {
+        //   history.goBack();
+        // });
+        this.props.onUpdateProducts(product);
     }else{ //add new
-      callApi('products', 'POST', {
-        name: txtName,
-        price: txtPrice,
-        status: chkbStatus
-      }).then(res => {
-        console.log(res);
-        history.goBack();
-      });
+      // callApi('products', 'POST', {
+      //   name: txtName,
+      //   price: txtPrice,
+      //   status: chkbStatus
+      // }).then(res => {
+      //   console.log(res);
+      //   history.goBack();
+      // });
+      this.props.onAddProducts(product);
     }
+    history.goBack(); // TRở lại trang có sản phẩm
   }
 
   render () {
@@ -132,7 +160,26 @@ showProduct = (products) => {
   }
   return result;
 }
-
 }
 
-export default ProductActionPage;
+const mapStateToProps = state => {
+  return {
+    itemEditing : state.itemEditing
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onAddProducts : (product) => {
+      dispatch(actAddProductsRequest(product));
+    },
+    onEditProducts : (id) => {
+      dispatch(actGetProductsRequest(id));
+    },
+    onUpdateProducts : (product) => {
+      dispatch(actUpdateProductsRequest(product));
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductActionPage);
